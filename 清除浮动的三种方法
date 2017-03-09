@@ -1,0 +1,61 @@
+第一种：添加新的元素，应用clear：both
+
+<div class="outer">
+    <div class="div1">1</div>
+    <div class="div2">2</div>
+    <div class="div3">3</div>
+    <div class="clear"></div>
+</div>
+
+CSS
+.clear{clear:both; height: 0; line-height: 0; font-size: 0}
+ 
+
+第二种：给父级元素定义overflow
+
+<div class="outer over-flow"> //这里添加了一个class
+    <div class="div1">1</div>
+    <div class="div2">2</div>
+    <div class="div3">3</div>
+    <!--<div class="clear"></div>-->
+</div>
+
+CSS
+.over-flow{
+    overflow: auto; //也可以设置hidden
+    zoom: 1; //zoom: 1; 处理兼容IE6的兼容性问题
+}
+
+ 
+第三种：:after 方法：（注意：作用于浮动元素的父亲）
+
+原理：
+这种方法清除浮动是现在网上最拉风的一种清除浮动，他是利用:after和:before来在元素内部插入两个元素块，从面达到清除浮动的效果。其实现原理
+类似于clear:both方法，只是区别在于:clear在html插入一个div.clear标签，而outer利用其伪类clear:after在元素内部增加一个类似于div.clear
+的效果。下面来看看其具体的使用方法：
+
+<div class="outer">
+    <div class="div1">1</div>
+    <div class="div2">2</div>
+    <div class="div3">3</div>
+</div>
+ 
+CSS清浮动
+.outer {zoom:1;}    /*==for IE6/7 Maxthon2==*/
+.outer :after {
+    clear:both;
+    content:'.';
+    display:block;
+    width: 0;
+    height: 0;
+    visibility:hidden;  /*==for FF/chrome/opera/IE8==*/
+}   
+  
+
+其中clear:both;指清除所有浮动；content: '.'; display:block;对于FF/chrome/opera/IE8不能缺少，其中content（）可以取值也可以为空。
+visibility:hidden;的作用是允许浏览器渲染它，但是不显示出来，这样才能实现清楚浮动。
+
+下一标签直接清浮动兄弟标签浮动时，在下一标签的属性中直接写入清除clear:both;这样就可以清除以上标签的浮动而不用加入空标签来清除浮动。
+
+*当一个内层元素是浮动的时候，如果没有关闭浮动时，其父元素也就不会再包含这个浮动的内层元素，因为此时浮动元素已经脱离了文档流。也就是为什么
+外层不能被撑开了！
